@@ -1,0 +1,31 @@
+SQL SERVER - DOCKER
+
+-- Pull container image SQL SERVER
+docker pull mcr.microsoft.com/mssql/server:2017-latest
+
+-- Run container SQL SERVER
+
+docker run -e "ACCEPT_EULA=Y" -e "MSSQL_SA_PASSWORD=<YourStrong!Passw0rd>" -p 1433:1433 -v D:\Docker\sqlserver:/var/opt/mssql -d mcr.microsoft.com/mssql/server:2017-latest
+
+Parameters
+-e 'ACCEPT_EULA=Y' - Insere a variavel ACCEPT_EULA para confirmar a licença de uso do SQL Server
+
+-e 'SA_PASSWORD=<YourStrong!Passw0rd>' - Especifica sua senha forte, ela deve conter mais de 8 caracteres e atender o requisitos de senha do SQL Server Password
+
+-p 1433:1433 - Mapeia um porta TCP no ambiente local(primeiro valor) como uma porta TCP no container (segundo valor).
+
+-v D:\Docker\sqlserver:/var/opt/mssql - Diretório onde será persistido os arquivos do container SQL Server
+
+--name sql1 - Especifica um nome para o container para não gerar um nome randomico, este nome não pode ser usado em mais de um container simultaneamente
+
+mcr.microsoft.com/mssql/server:2017-latest - Local da image do container SQL SERVER 2017
+
+-- View DOCKER Containers
+docker ps -a
+
+-- Change the SA password
+
+docker exec -it sql1 /opt/mssql-tools/bin/sqlcmd `
+   -S localhost -U SA -P "<YourStrong!Passw0rd>" `
+   -Q "ALTER LOGIN SA WITH PASSWORD='<YourNewStrong!Passw0rd>'"
+   
